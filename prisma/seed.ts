@@ -11,6 +11,16 @@ async function main() {
     });
   }
 
+  const departments = ["Computer Science", "Electronics", "Mechanical", "Civil"];
+  for (const name of departments) {
+    // @ts-ignore - department model added in Mongo schema
+    await (prisma as any).department?.upsert?.({
+      where: { name },
+      update: {},
+      create: { name },
+    }).catch(() => Promise.resolve());
+  }
+
   const name = process.env.SUPER_ADMIN_NAME || "Super Admin";
   const email = process.env.SUPER_ADMIN_EMAIL || "super@example.com";
   const password = process.env.SUPER_ADMIN_PASSWORD || "password123";

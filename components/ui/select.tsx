@@ -17,7 +17,7 @@ SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
 export const SelectContent = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>>(
   ({ className, ...props }, ref) => (
-    <SelectPrimitive.Content ref={ref} className={"z-50 rounded-md border bg-popover p-1 text-popover-foreground shadow-md " + (className ?? "")} {...props} />
+    <SelectPrimitive.Content ref={ref} className={"z-50 rounded-md border bg-popover p-1 text-popover-foreground shadow-lg max-h-64 overflow-auto " + (className ?? "")} {...props} />
   )
 );
 SelectContent.displayName = SelectPrimitive.Content.displayName;

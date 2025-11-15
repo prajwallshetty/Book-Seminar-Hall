@@ -13,13 +13,13 @@ enum Role {
 }
 
 model User {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
   name         String?
-  email        String   @unique
+  email        String    @unique
   passwordHash String
-  role         Role     @default(ADMIN)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  role         Role      @default(ADMIN)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
   bookings     Booking[] @relation("UserBookings")
 }
 
@@ -30,11 +30,19 @@ model Hall {
   bookings  Booking[]
 }
 
+model Department {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  bookings  Booking[]
+}
+
 model Booking {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   hall         Hall     @relation(fields: [hallId], references: [id])
   hallId       String   @db.ObjectId
-  department   String
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String   @db.ObjectId
   purpose      String
   startTime    DateTime
   endTime      DateTime

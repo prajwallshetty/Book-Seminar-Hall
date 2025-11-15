@@ -3,11 +3,11 @@ import { NextResponse } from "next/server";
 import { Parser } from "@json2csv/plainjs";
 
 export async function GET() {
-  const bookings = await prisma.booking.findMany({ include: { hall: true, createdBy: true } });
+  const bookings = await prisma.booking.findMany({ include: { hall: true, createdBy: true, department: true } });
   const rows = bookings.map((b) => ({
     id: b.id,
     hall: b.hall.name,
-    department: b.department,
+    department: b.department?.name ?? "",
     purpose: b.purpose,
     startTime: b.startTime.toISOString(),
     endTime: b.endTime.toISOString(),

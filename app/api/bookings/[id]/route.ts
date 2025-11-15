@@ -7,7 +7,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   const session = await getServerSession(authOptions);
   if (!session?.user) return new NextResponse("Unauthorized", { status: 401 });
   const body = await req.json();
-  const { hallId, department, purpose, startTime, endTime } = body as any;
+  const { hallId, departmentId, purpose, startTime, endTime } = body as any;
   const start = new Date(startTime);
   const end = new Date(endTime);
   if (end <= start) return new NextResponse("End must be after start", { status: 400 });
@@ -25,7 +25,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 
   const updated = await prisma.booking.update({
     where: { id: params.id },
-    data: { hallId, department, purpose, startTime: start, endTime: end },
+    data: { hallId, departmentId, purpose, startTime: start, endTime: end },
   });
   return NextResponse.json(updated);
 }

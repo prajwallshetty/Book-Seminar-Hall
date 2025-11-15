@@ -8,17 +8,19 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Hall { id: string; name: string }
-interface Booking { id: string; hallId: string; department: string; purpose: string; startTime: string; endTime: string; hall: Hall; createdBy: { email: string } }
+interface Department { id: string; name: string }
+interface Booking { id: string; hallId: string; departmentId: string; purpose: string; startTime: string; endTime: string; hall: Hall; department?: Department; createdBy: { email: string } }
 
-export default function BookingsClient({ halls, initialData }: { halls: Hall[]; initialData: Booking[] }) {
+export default function BookingsClient({ halls, departments, initialData }: { halls: Hall[]; departments: Department[]; initialData: Booking[] }) {
   const [data, setData] = useState<Booking[]>(initialData);
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Booking | null>(null);
   const [filterHallId, setFilterHallId] = useState<string>("");
-  const [filterDept, setFilterDept] = useState<string>("");
+  const [filterDeptId, setFilterDeptId] = useState<string>("");
   const [formHallId, setFormHallId] = useState<string>(halls[0]?.id ?? "");
+  const [formDeptId, setFormDeptId] = useState<string>(departments[0]?.id ?? "");
 
-  const filtered = useMemo(() => data.filter(b => (!filterHallId || b.hallId === filterHallId) && (!filterDept || b.department.toLowerCase().includes(filterDept.toLowerCase()))), [data, filterHallId, filterDept]);
+  const filtered = useMemo(() => data.filter(b => (!filterHallId || b.hallId === filterHallId) && (!filterDeptId || b.departmentId === filterDeptId)), [data, filterHallId, filterDeptId]);
 
   async function refresh() {
     const res = await fetch("/api/bookings");
@@ -28,7 +30,7 @@ export default function BookingsClient({ halls, initialData }: { halls: Hall[]; 
   async function submit(form: FormData) {
     const payload = {
       hallId: String(form.get("hallId")),
-      department: String(form.get("department")),
+      departmentId: String(form.get("departmentId")),
       purpose: String(form.get("purpose")),
       startTime: String(form.get("startTime")),
       endTime: String(form.get("endTime")),
@@ -59,11 +61,13 @@ export default function BookingsClient({ halls, initialData }: { halls: Hall[]; 
   function openCreate() {
     setEditing(null);
     setFormHallId(halls[0]?.id ?? "");
+    setFormDeptId(departments[0]?.id ?? "");
     setOpen(true);
   }
   function openEdit(b: Booking) {
     setEditing(b);
     setFormHallId(b.hallId);
+    setFormDeptId(b.departmentId);
     setOpen(true);
   }
 
@@ -71,16 +75,24 @@ export default function BookingsClient({ halls, initialData }: { halls: Hall[]; 
     <div className="space-y-4">
       <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
         <div className="flex gap-2">
-          <Select value={filterHallId} onValueChange={setFilterHallId}>
+          <Select value={filterHallId || "all"} onValueChange={(v) => setFilterHallId(v === "all" ? "" : v)}>
             <SelectTrigger className="w-48"><SelectValue placeholder="Filter by hall" /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Halls</SelectItem>
+              <SelectItem value="all">All Halls</SelectItem>
               {halls.map(h => (
                 <SelectItem key={h.id} value={h.id}>{h.name}</SelectItem>
               ))}
             </SelectContent>
           </Select>
-          <Input placeholder="Filter by department" value={filterDept} onChange={(e) => setFilterDept(e.target.value)} className="w-56" />
+          <Select value={filterDeptId || "all"} onValueChange={(v) => setFilterDeptId(v === "all" ? "" : v)}>
+            <SelectTrigger className="w-52"><SelectValue placeholder="Filter by department" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Departments</SelectItem>
+              {departments.map(d => (
+                <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <div className="flex gap-2">
           <a href="/api/bookings/export"><Button variant="outline">Export CSV</Button></a>
@@ -104,7 +116,7 @@ export default function BookingsClient({ halls, initialData }: { halls: Hall[]; 
           {filtered.map((b) => (
             <Tr key={b.id}>
               <Td>{b.hall.name}</Td>
-              <Td>{b.department}</Td>
+              <Td>{b.department?.name || ""}</Td>
               <Td className="max-w-xs truncate" title={b.purpose}>{b.purpose}</Td>
               <Td>{new Date(b.startTime).toLocaleString()}</Td>
               <Td>{new Date(b.endTime).toLocaleString()}</Td>
@@ -136,7 +148,15 @@ export default function BookingsClient({ halls, initialData }: { halls: Hall[]; 
             </div>
             <div>
               <Label>Department</Label>
-              <Input name="department" defaultValue={editing?.department ?? ""} required />
+              <input type="hidden" name="departmentId" value={formDeptId} />
+              <Select value={formDeptId} onValueChange={setFormDeptId}>
+                <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {departments.map((d) => (
+                    <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <Label>Purpose</Label>

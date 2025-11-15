@@ -5,5 +5,6 @@ export const config = {
     "/dashboard/:path*",
     "/api/bookings/:path*",
     "/api/admins/:path*",
+    "/api/departments/:path*",
   ],
 };
