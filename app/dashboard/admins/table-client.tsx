@@ -6,16 +6,23 @@ import { Dialog, DialogContent, DialogHeader, DialogFooter } from "@/components/
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Admin { id: string; name: string | null; email: string; role: "SUPER_ADMIN" | "ADMIN"; createdAt: string }
 
 export default function AdminsClient({ initialData }: { initialData: Admin[] }) {
   const [data, setData] = useState<Admin[]>(initialData);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   async function refresh() {
-    const res = await fetch("/api/admins");
-    setData(await res.json());
+    try {
+      setLoading(true);
+      const res = await fetch("/api/admins");
+      setData(await res.json());
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function create(form: FormData) {
@@ -45,32 +52,53 @@ export default function AdminsClient({ initialData }: { initialData: Admin[] }) 
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-end">
-        <Button onClick={() => setOpen(true)}>New Admin</Button>
+    <div className="space-y-4 text-sm">
+      <div className="flex items-center justify-between rounded-2xl bg-muted/60 p-3 shadow-md transition-all duration-200 hover:shadow-lg hover:-translate-y-[1px]">
+        <div className="text-xs font-medium text-muted-foreground">
+          Manage admins with access to this console.
+        </div>
+        <Button onClick={() => setOpen(true)} className="rounded-xl text-xs">
+          New Admin
+        </Button>
       </div>
-      <Table>
-        <Thead>
-          <Tr>
-            <Th>Name</Th>
-            <Th>Email</Th>
-            <Th>Role</Th>
-            <Th>Created</Th>
-            <Th></Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {data.map((u) => (
-            <Tr key={u.id}>
-              <Td>{u.name || "—"}</Td>
-              <Td>{u.email}</Td>
-              <Td>{u.role}</Td>
-              <Td>{new Date(u.createdAt).toLocaleString()}</Td>
-              <Td className="text-right"><Button variant="ghost" onClick={() => remove(u.id)}>Delete</Button></Td>
+      <div className="overflow-hidden rounded-2xl bg-card/90 shadow-md transition-all duration-200 hover:shadow-lg">
+        <Table>
+          <Thead>
+            <Tr>
+              <Th>Name</Th>
+              <Th>Email</Th>
+              <Th>Role</Th>
+              <Th>Created</Th>
+              <Th></Th>
             </Tr>
-          ))}
-        </Tbody>
-      </Table>
+          </Thead>
+          <Tbody>
+            {loading
+              ? Array.from({ length: 4 }).map((_, i) => (
+                  <Tr key={i}>
+                    <Td><Skeleton className="h-4 w-24 rounded-full" /></Td>
+                    <Td><Skeleton className="h-4 w-40 rounded-full" /></Td>
+                    <Td><Skeleton className="h-4 w-20 rounded-full" /></Td>
+                    <Td><Skeleton className="h-4 w-32 rounded-full" /></Td>
+                    <Td className="text-right"><Skeleton className="ml-auto h-7 w-14 rounded-full" /></Td>
+                  </Tr>
+                ))
+              : data.map((u) => (
+                  <Tr key={u.id}>
+                    <Td>{u.name || "—"}</Td>
+                    <Td>{u.email}</Td>
+                    <Td>{u.role}</Td>
+                    <Td>{new Date(u.createdAt).toLocaleString()}</Td>
+                    <Td className="text-right">
+                      <Button variant="ghost" onClick={() => remove(u.id)} className="h-7 rounded-full px-2 text-xs">
+                        Delete
+                      </Button>
+                    </Td>
+                  </Tr>
+                ))}
+          </Tbody>
+        </Table>
+      </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
