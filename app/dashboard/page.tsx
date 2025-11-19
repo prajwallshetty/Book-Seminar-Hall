@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { HelpCircle } from "lucide-react";
 import { BookingsChart } from "@/components/dashboard/bookings-chart";
 
 export default async function DashboardPage() {
@@ -56,6 +57,13 @@ export default async function DashboardPage() {
             </h1>
           </div>
         </div>
+        <a
+          href="/support"
+          className="inline-flex h-9 items-center justify-center gap-1.5 rounded-full border border-black px-3 text-xs font-medium text-black hover:bg-black hover:text-white transition-colors"
+        >
+          <HelpCircle className="h-3.5 w-3.5" />
+          <span>Support</span>
+        </a>
       </div>
 
       <div className="grid gap-6 md:grid-cols-3">
