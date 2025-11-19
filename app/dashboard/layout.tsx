@@ -10,7 +10,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar userEmail={(session?.user as any)?.email} role={role} />
-      <main className="flex-1 space-y-6 bg-gradient-to-br from-background via-background to-muted/40 px-6 py-6">
+      <main className="flex-1 space-y-6 bg-white px-8 py-8 text-foreground">
         {children}
       </main>
     </div>

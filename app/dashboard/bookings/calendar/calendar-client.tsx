@@ -64,7 +64,7 @@ export default function CalendarClient({ halls, departments, initialData }: { ha
 
   return (
     <div className="grid gap-6 md:grid-cols-[340px_1fr] text-sm">
-      <div className="space-y-4 rounded-2xl border border-border/60 bg-card/60 p-4 shadow-sm">
+      <div className="space-y-4 rounded-2xl bg-white/95 dark:bg-neutral-900/90 p-4 shadow-sm">
         <div className="grid gap-2">
           <Label>Hall</Label>
           <Select
@@ -99,7 +99,7 @@ export default function CalendarClient({ halls, departments, initialData }: { ha
             </SelectContent>
           </Select>
         </div>
-        <div className="rounded-2xl border border-border/60 bg-background p-3 text-xs shadow-sm">
+        <div className="rounded-2xl bg-background p-3 text-xs shadow-sm">
           <DayPicker
             mode="single"
             selected={selected}
@@ -120,11 +120,11 @@ export default function CalendarClient({ halls, departments, initialData }: { ha
           <div>
             {selected ? selected.toDateString() : "Select a date"}
           </div>
-          <div className="rounded-full border border-border/70 px-2 py-0.5">
+          <div className="rounded-full bg-muted/60 px-2 py-0.5">
             {dayBookings.length} booking(s)
           </div>
         </div>
-        <div className="overflow-hidden rounded-2xl border border-border/60 bg-card/60 shadow-sm">
+        <div className="overflow-hidden rounded-2xl bg-white/95 dark:bg-neutral-900/90 shadow-sm">
           <Table>
             <Thead>
               <Tr>

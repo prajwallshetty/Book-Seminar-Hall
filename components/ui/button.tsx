@@ -7,14 +7,14 @@ function cn(...classes: (string | undefined)[]) {
 }
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background",
+  "inline-flex items-center justify-center rounded-xl text-sm font-medium transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow hover:opacity-90",
-        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        destructive: "bg-destructive text-destructive-foreground hover:opacity-90",
+        default: "bg-black text-white shadow-sm hover:shadow-md hover:-translate-y-[1px]",
+        outline: "bg-white text-foreground shadow-sm hover:shadow-md hover:-translate-y-[1px]",
+        ghost: "text-muted-foreground hover:text-foreground hover:bg-muted/40",
+        destructive: "bg-destructive text-destructive-foreground shadow-sm hover:shadow-md hover:-translate-y-[1px]",
       },
       size: {
         default: "h-10 px-4 py-2",

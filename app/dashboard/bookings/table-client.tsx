@@ -114,7 +114,7 @@ export default function BookingsClient({ halls, departments, initialData }: { ha
 
   return (
     <div className="space-y-4 text-sm">
-      <div className="flex flex-col gap-3 rounded-2xl bg-muted/60 p-3 shadow-md transition-all duration-200 hover:shadow-lg hover:-translate-y-[1px] md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-3 rounded-2xl bg-white p-3 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-wrap gap-2">
           <Select value={filterHallId} onValueChange={setFilterHallId}>
             <SelectTrigger className="w-48 rounded-xl text-xs">
@@ -151,7 +151,7 @@ export default function BookingsClient({ halls, departments, initialData }: { ha
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-2xl bg-card/90 shadow-md transition-all duration-200 hover:shadow-lg">
+      <div className="overflow-hidden rounded-2xl bg-card/90">
         <Table>
           <Thead>
             <Tr>
@@ -225,7 +225,9 @@ export default function BookingsClient({ halls, departments, initialData }: { ha
                           "rounded-full px-2.5 py-0.5 text-[10px] font-medium tracking-wide " +
                           (getStatus(b) === "PAST"
                             ? "bg-destructive text-destructive-foreground"
-                            : "bg-green-600 text-white")
+                            : getStatus(b) === "ONGOING"
+                            ? "bg-black text-white"
+                            : "bg-muted text-foreground")
                         }
                       >
                         {getStatus(b) === "UPCOMING"

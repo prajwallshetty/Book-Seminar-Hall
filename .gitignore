@@ -16,7 +16,7 @@
 # Misc
 .DS_Store
 *.log
-*.env.local
+*.env
 
 # Prisma
 /prisma/*.db

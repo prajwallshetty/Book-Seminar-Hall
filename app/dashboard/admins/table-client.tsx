@@ -53,7 +53,7 @@ export default function AdminsClient({ initialData }: { initialData: Admin[] }) 
 
   return (
     <div className="space-y-4 text-sm">
-      <div className="flex items-center justify-between rounded-2xl bg-muted/60 p-3 shadow-md transition-all duration-200 hover:shadow-lg hover:-translate-y-[1px]">
+      <div className="flex items-center justify-between rounded-2xl bg-white p-3">
         <div className="text-xs font-medium text-muted-foreground">
           Manage admins with access to this console.
         </div>
@@ -61,7 +61,7 @@ export default function AdminsClient({ initialData }: { initialData: Admin[] }) 
           New Admin
         </Button>
       </div>
-      <div className="overflow-hidden rounded-2xl bg-card/90 shadow-md transition-all duration-200 hover:shadow-lg">
+      <div className="overflow-hidden rounded-2xl bg-card/90">
         <Table>
           <Thead>
             <Tr>
