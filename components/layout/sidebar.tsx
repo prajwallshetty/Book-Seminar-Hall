@@ -80,8 +80,12 @@ export function Sidebar({ userEmail, role }: SidebarProps) {
     >
       <div className="flex items-center justify-between px-4 py-4">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-black text-xs font-semibold text-white shadow-sm">
-            SH
+          <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm">
+            <img
+              src="/ajiet.jpg"
+              alt="AJIET logo"
+              className="h-full w-full object-contain"
+            />
           </div>
           {!collapsed && (
             <div className="flex flex-col">
