@@ -8,7 +8,11 @@ import DepartmentsClient from "./table-client";
 export default async function DepartmentsPage() {
   const session = await getServerSession(authOptions);
   if ((session?.user as any)?.role !== "SUPER_ADMIN") redirect("/dashboard");
-  const departments = await prisma.department.findMany({ orderBy: { name: "asc" } } as any);
+  const rawDepartments = await prisma.department.findMany({ orderBy: { name: "asc" } } as any);
+  const departments = rawDepartments.map((d: any) => ({
+    ...d,
+    createdAt: d.createdAt.toISOString(),
+  }));
   return (
     <Card>
       <CardHeader><CardTitle>Departments</CardTitle></CardHeader>

@@ -9,10 +9,29 @@ import { Badge } from "@/components/ui/badge";
 
 interface Hall { id: string; name: string }
 interface Department { id: string; name: string }
-interface Booking { id: string; hallId: string; departmentId: string; purpose: string; startTime: string; endTime: string; hall: Hall; department?: Department; createdBy: { email: string } }
+interface Booking {
+  id: string;
+  hallId: string;
+  departmentId: string;
+  purpose: string;
+  startTime: Date;
+  endTime: Date;
+  hall: Hall;
+  department?: Department;
+  createdBy?: { email: string };
+}
 
 function toDateKey(d: Date) {
   return d.toISOString().slice(0,10);
+}
+
+function formatTime(value: Date) {
+  return new Intl.DateTimeFormat("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  }).format(value);
 }
 
 export default function CalendarClient({ halls, departments, initialData }: { halls: Hall[]; departments: Department[]; initialData: Booking[] }) {
@@ -154,10 +173,10 @@ export default function CalendarClient({ halls, departments, initialData }: { ha
                     {b.purpose}
                   </Td>
                   <Td className="whitespace-nowrap">
-                    {new Date(b.startTime).toLocaleTimeString()}
+                    {formatTime(b.startTime)}
                   </Td>
                   <Td className="whitespace-nowrap">
-                    {new Date(b.endTime).toLocaleTimeString()}
+                    {formatTime(b.endTime)}
                   </Td>
                   <Td className="whitespace-nowrap">
                     <Badge
@@ -176,7 +195,7 @@ export default function CalendarClient({ halls, departments, initialData }: { ha
                     </Badge>
                   </Td>
                   <Td className="whitespace-nowrap text-muted-foreground group-hover:text-foreground">
-                    {b.createdBy.email}
+                    {b.createdBy?.email ?? ""}
                   </Td>
                 </Tr>
               ))}

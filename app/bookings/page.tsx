@@ -3,12 +3,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import BookingsClient from "@/app/dashboard/bookings/table-client";
 
 export default async function PublicBookingsPage() {
-  const [halls, departments, bookings] = await Promise.all([
+  const [halls, departments, rawBookings] = await Promise.all([
     prisma.hall.findMany({ orderBy: { name: "asc" } }),
     // @ts-ignore department exists after prisma generate
     (prisma as any).department?.findMany?.({ orderBy: { name: "asc" } }) ?? [],
-    prisma.booking.findMany({ include: { hall: true, createdBy: true, /* @ts-ignore */ department: true }, orderBy: { startTime: "asc" } }),
+    prisma.booking.findMany({ include: { hall: true, /* @ts-ignore */ department: true }, orderBy: { startTime: "asc" } }),
   ]);
+
+  const bookings = rawBookings.map((b) => ({
+    ...b,
+    startTime: b.startTime.toISOString(),
+    endTime: b.endTime.toISOString(),
+  }));
 
   return (
     <div className="space-y-6">

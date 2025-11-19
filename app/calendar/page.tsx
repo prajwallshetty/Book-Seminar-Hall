@@ -7,7 +7,7 @@ export default async function PublicCalendarPage() {
     prisma.hall.findMany({ orderBy: { name: "asc" } }),
     // @ts-ignore department exists after prisma generate
     (prisma as any).department?.findMany?.({ orderBy: { name: "asc" } }),
-    prisma.booking.findMany({ include: { hall: true, createdBy: true, /* @ts-ignore */ department: true } }),
+    prisma.booking.findMany({ include: { hall: true, /* @ts-ignore */ department: true } }),
   ]);
 
   return (

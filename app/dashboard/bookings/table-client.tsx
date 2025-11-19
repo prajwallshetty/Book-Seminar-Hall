@@ -11,7 +11,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 interface Hall { id: string; name: string }
 interface Department { id: string; name: string }
-interface Booking { id: string; hallId: string; departmentId: string; purpose: string; startTime: string; endTime: string; hall: Hall; department?: Department; createdBy: { email: string } }
+interface Booking {
+  id: string;
+  hallId: string;
+  departmentId: string;
+  purpose: string;
+  startTime: string;
+  endTime: string;
+  hall: Hall;
+  department?: Department;
+  createdBy?: { email: string };
+}
 
 export default function BookingsClient({ halls, departments, initialData }: { halls: Hall[]; departments: Department[]; initialData: Booking[] }) {
   const [data, setData] = useState<Booking[]>(initialData);
@@ -32,6 +42,19 @@ export default function BookingsClient({ halls, departments, initialData }: { ha
       ),
     [data, filterHallId, filterDeptId]
   );
+
+  function formatDateTime(value: string) {
+    const d = new Date(value);
+    return new Intl.DateTimeFormat("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    }).format(d);
+  }
 
   const filterHallLabel =
     filterHallId === "all"
@@ -214,10 +237,10 @@ export default function BookingsClient({ halls, departments, initialData }: { ha
                       {b.purpose}
                     </Td>
                     <Td className="whitespace-nowrap">
-                      {new Date(b.startTime).toLocaleString()}
+                      {formatDateTime(b.startTime)}
                     </Td>
                     <Td className="whitespace-nowrap">
-                      {new Date(b.endTime).toLocaleString()}
+                      {formatDateTime(b.endTime)}
                     </Td>
                     <Td className="whitespace-nowrap">
                       <Badge
@@ -238,7 +261,7 @@ export default function BookingsClient({ halls, departments, initialData }: { ha
                       </Badge>
                     </Td>
                     <Td className="whitespace-nowrap text-muted-foreground group-hover:text-foreground">
-                      {b.createdBy.email}
+                      {b.createdBy?.email ?? ""}
                     </Td>
                     <Td className="w-0 whitespace-nowrap text-right">
                       <div className="flex items-center justify-end gap-1">

@@ -7,7 +7,7 @@ export default async function CalendarPage() {
     prisma.hall.findMany({ orderBy: { name: "asc" } }),
     // @ts-ignore
     (prisma as any).department.findMany({ orderBy: { name: "asc" } }),
-    prisma.booking.findMany({ include: { hall: true, createdBy: true, /* @ts-ignore */ department: true } }),
+    prisma.booking.findMany({ include: { hall: true, /* @ts-ignore */ department: true } }),
   ]);
   return (
     <div className="space-y-6">

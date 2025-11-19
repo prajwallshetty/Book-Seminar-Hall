@@ -25,6 +25,19 @@ export default function AdminsClient({ initialData }: { initialData: Admin[] }) 
     }
   }
 
+  function formatDateTime(value: string) {
+    const d = new Date(value);
+    return new Intl.DateTimeFormat("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    }).format(d);
+  }
+
   async function create(form: FormData) {
     const payload = {
       name: String(form.get("name") || ""),
@@ -88,7 +101,7 @@ export default function AdminsClient({ initialData }: { initialData: Admin[] }) 
                     <Td>{u.name || "—"}</Td>
                     <Td>{u.email}</Td>
                     <Td>{u.role}</Td>
-                    <Td>{new Date(u.createdAt).toLocaleString()}</Td>
+                    <Td>{formatDateTime(u.createdAt)}</Td>
                     <Td className="text-right">
                       <Button variant="ghost" onClick={() => remove(u.id)} className="h-7 rounded-full px-2 text-xs">
                         Delete

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { Parser } from "@json2csv/plainjs";
 
 export async function GET() {
-  const bookings = await prisma.booking.findMany({ include: { hall: true, createdBy: true, department: true } });
+  const bookings = await prisma.booking.findMany({ include: { hall: true, department: true } });
   const rows = bookings.map((b) => ({
     id: b.id,
     hall: b.hall.name,
@@ -11,7 +11,6 @@ export async function GET() {
     purpose: b.purpose,
     startTime: b.startTime.toISOString(),
     endTime: b.endTime.toISOString(),
-    createdBy: b.createdBy.email,
     createdAt: b.createdAt.toISOString(),
   }));
   const parser = new Parser();
